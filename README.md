@@ -1,1 +1,0 @@
-# items-manager-react-graphql-typescript
