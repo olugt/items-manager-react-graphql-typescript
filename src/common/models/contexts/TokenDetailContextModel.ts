@@ -8,7 +8,7 @@ export default class TokenDetailContextModel extends ContextModelBase {
      * @param expiryDatetime Date-time of expiry of token (also already embeded in the token).
      * @param emailAddress User's email address.
      */
-    constructor(public token: string, public expiryDatetime: Date | undefined, public emailAddress: string) {
+    constructor(public token?: string, public expiryDatetime?: Date, public emailAddress?: string) {
         super([token, expiryDatetime, emailAddress]);
     }
 
