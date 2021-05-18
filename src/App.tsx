@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext, useState } from 'react'
+import ContextProviderValueModel from './common/models/ContextProviderValueModel';
+import ConfigurationContextModel from './common/models/contexts/ConfigurationContextModel';
+import NotificationContextModel from './common/models/contexts/NotificationContextModel';
+import TokenDetailContextModel from './common/models/contexts/TokenDetailContextModel';
 
-function App() {
+export const ConfigurationContext = createContext(new ContextProviderValueModel<ConfigurationContextModel>());
+export const NotificationContext = createContext(new ContextProviderValueModel<NotificationContextModel>());
+export const TokenContext = createContext(new ContextProviderValueModel<TokenDetailContextModel>());
+
+const App = () => {
+
+  const [configurationContextState, setConfigurationContextState] = useState(new ConfigurationContextModel());
+  const [notificationContextState, setNotificationContextState] = useState(new NotificationContextModel());
+  const [tokenContextState, setTokenContextState] = useState(new TokenDetailContextModel());
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigurationContext.Provider value={new ContextProviderValueModel(configurationContextState, setConfigurationContextState)}>
+      <NotificationContext.Provider value={new ContextProviderValueModel(notificationContextState, setNotificationContextState)}>
+        <TokenContext.Provider value={new ContextProviderValueModel(tokenContextState, setTokenContextState)}>
+
+          {/*Layout component goes here. */}
+
+        </TokenContext.Provider>
+      </NotificationContext.Provider >
+    </ConfigurationContext.Provider>
   );
 }
 
-export default App;
+export default App
