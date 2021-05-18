@@ -4,15 +4,15 @@ import ConfigurationContextModel from './common/models/contexts/ConfigurationCon
 import NotificationContextModel from './common/models/contexts/NotificationContextModel';
 import TokenDetailContextModel from './common/models/contexts/TokenDetailContextModel';
 
-export const ConfigurationContext = createContext(new ContextProviderValueModel<ConfigurationContextModel>());
-export const NotificationContext = createContext(new ContextProviderValueModel<NotificationContextModel>());
-export const TokenContext = createContext(new ContextProviderValueModel<TokenDetailContextModel>());
+export const ConfigurationContext = createContext<ContextProviderValueModel<ConfigurationContextModel>>(undefined as any);
+export const NotificationContext = createContext<ContextProviderValueModel<NotificationContextModel>>(undefined as any);
+export const TokenContext = createContext<ContextProviderValueModel<TokenDetailContextModel>>(undefined as any);
 
 const App = () => {
 
-  const [configurationContextState, setConfigurationContextState] = useState(new ConfigurationContextModel());
-  const [notificationContextState, setNotificationContextState] = useState(new NotificationContextModel());
-  const [tokenContextState, setTokenContextState] = useState(new TokenDetailContextModel());
+  const [configurationContextState, setConfigurationContextState] = useState(new ConfigurationContextModel() as ConfigurationContextModel | null);
+  const [notificationContextState, setNotificationContextState] = useState(new NotificationContextModel() as NotificationContextModel | null);
+  const [tokenContextState, setTokenContextState] = useState(new TokenDetailContextModel() as TokenDetailContextModel | null);
 
   return (
     <ConfigurationContext.Provider value={new ContextProviderValueModel(configurationContextState, setConfigurationContextState)}>
