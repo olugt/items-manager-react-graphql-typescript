@@ -9,7 +9,7 @@ export default class NotificationContextModel extends ContextModelBase {
      * @param show If should show notification.
      * @param message Notification message.
      */
-    constructor(public show: boolean, message: string) {
+    constructor(public show?: boolean, message?: string) {
         super([show, message]);
     }
 
