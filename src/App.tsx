@@ -1,8 +1,10 @@
+import './App.css';
 import React, { createContext, useState } from 'react'
 import ContextProviderValueModel from './common/models/ContextProviderValueModel';
 import ConfigurationContextModel from './common/models/contexts/ConfigurationContextModel';
 import NotificationContextModel from './common/models/contexts/NotificationContextModel';
 import TokenDetailContextModel from './common/models/contexts/TokenDetailContextModel';
+import Layout from './components/Layout';
 
 export const ConfigurationContext = createContext<ContextProviderValueModel<ConfigurationContextModel>>(undefined as any);
 export const NotificationContext = createContext<ContextProviderValueModel<NotificationContextModel>>(undefined as any);
@@ -19,7 +21,7 @@ const App = () => {
       <NotificationContext.Provider value={new ContextProviderValueModel(notificationContextState, setNotificationContextState)}>
         <TokenContext.Provider value={new ContextProviderValueModel(tokenContextState, setTokenContextState)}>
 
-          {/*Layout component goes here. */}
+          <Layout />
 
         </TokenContext.Provider>
       </NotificationContext.Provider >

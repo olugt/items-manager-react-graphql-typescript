@@ -10,8 +10,6 @@ import Login from '../components/user/Login';
  */
 const MainRoutes = () => {
 
-    throw new Error("Auhorized route for items page not yet implemented.")
-
     return (
         <Switch>
             <Route exact path={lp.home}>
@@ -26,6 +24,7 @@ const MainRoutes = () => {
             </Route>
         </Switch>
     )
+    
 }
 
 export default MainRoutes
