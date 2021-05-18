@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import NotificationContextModel from '../../common/models/contexts/NotificationContextModel';
 import useNotificationContext from '../../hooks/contexts/useNotificationContext';
 
-const Notification = (props: {model: NotificationContextModel, children: ReactNode}) => {
+const Notification = (props: {model: NotificationContextModel, children?: ReactNode}) => {
     
     const setNotificationContextState = useNotificationContext().setState;
 

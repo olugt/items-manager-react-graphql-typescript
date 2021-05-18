@@ -1,22 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
+import { Redirect, Route } from 'react-router';
+import { isTokenValid, makeLoginUrlOnIdentityError } from '../common/logic/identityLogic';
+import useTokenContext from '../hooks/contexts/useTokenContext';
 
-// /**
-//  * A basic authorized Route. It should be used just like Route component, but where user actions and navigation need to be authorized.
-//  * @param {{path: String, children: Object, rest: Object}} param0 React props.
-//  * @returns Redirection to login or allows pass through to destination.
-//  */
-const AuthorizedRoute: React.FunctionComponent<{ path: string, rest: [] }> = props => {
-    throw new Error("Not implemented.")
-    return (
-        <div>
-            {props.children}
-        </div>
-    )
-}
+/**
+ * A basic authorized Route. It should be used just like Route component, but where user actions and navigation need to be authorized.
+ * @param props React props.
+ * @returns 
+ */
+const AuthorizedRoute = (props: { path: string, rest?: [], children: ReactNode }) => {
+    const { state: tokenContextState, setState: _setTokenContextState } = useTokenContext();
 
-AuthorizedRoute.propTypes = {
-
+    return (isTokenValid(tokenContextState)) ?
+        (<Route exact path={props.path} {...props.rest}>{props.children}</Route>) :
+        (<Redirect to={makeLoginUrlOnIdentityError(props.path)} />)
 }
 
 export default AuthorizedRoute
