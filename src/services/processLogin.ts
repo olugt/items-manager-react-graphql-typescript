@@ -1,5 +1,6 @@
-import ErrorModel from "../common/models/ErrorModel";
+import ErrorModel from '../common/models/ErrorModel';
 import TokenDetailContextModel from '../common/models/contexts/TokenDetailContextModel';
+import ItemsManagerGraphQlServer from "../infrastructure/graphql/ItemsManagerGraphQlServer";
 
 /**
  * 
@@ -16,6 +17,15 @@ export default function processLogin(
     doRestOnSuccessfulLogin: () => any,
     handleErrorCallback: (_: ErrorModel) => void) {
 
-    throw new Error("Not implemented.")
+    new ItemsManagerGraphQlServer().login(emailAddress, password)
+        .then((value) => {
+            console.log(value.expiryDatetime)
+            setTokenContextState(value);
+            doRestOnSuccessfulLogin();
+        })
+        .catch((error) => {
+            console.log(error);
+            handleErrorCallback(error);
+        });
 
 }

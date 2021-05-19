@@ -25,7 +25,7 @@ const Layout = () => {
                         <div className="container">
                             <div className="row">
                                 <div className="col-12 col-md-12">
-                                    <div><h5>Token Manager</h5></div>
+                                    <div><h5>Items Manager</h5></div>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import ErrorModel from "../ErrorModel";
 import ContextModelBase from "./ContextModelBase";
+import { graphQlResponseType, graphQlResponseTypeDataBase } from '../../types/GraphQlResponseType';
 
 export default class NotificationContextModel extends ContextModelBase {
     public isError: boolean | undefined;
@@ -20,6 +21,15 @@ export default class NotificationContextModel extends ContextModelBase {
      */
     setError(error: ErrorModel) {
         console.log(error);
+
+        this.message = "Error occurred.";
+        try {
+            let errorData = error.data as graphQlResponseType<graphQlResponseTypeDataBase>;
+            if (errorData?.data?.errors) {
+                console.log(errorData)
+                this.message = Object.keys(errorData.data.errors).map(a => errorData.data!.errors![a]).reduce(b => b.map(c => c)).join("\n");
+            }
+        } catch { }
 
         this.isError = true;
         this.error = error;

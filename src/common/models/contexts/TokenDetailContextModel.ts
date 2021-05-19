@@ -14,13 +14,13 @@ export default class TokenDetailContextModel extends ContextModelBase {
 
     /**
      * 
-     * @param parsedJson An object that is the result of parsing a JSON representation of this class using JSON.parse function.
+     * @param theAny An object that could be from the result of parsing a JSON representation of this class using JSON.parse function, from web API, etc. This function is to ensure that especially the Date type is correctly constructed.
      */
-    fromParsedJson(parsedJson: any) {
-        if (parsedJson) {
-            this.token = parsedJson["token"] as string;
-            this.expiryDatetime = parsedJson["expiryDatetime"] ? new Date(parsedJson["expiryDatetime"] as string) : undefined;
-            this.emailAddress = parsedJson["emailAddress"] as string;
+    fromAny(theAny: any) {
+        if (theAny) {
+            this.token = theAny["token"] as string;
+            this.expiryDatetime = theAny["expiryDatetime"] ? new Date(theAny["expiryDatetime"] as string) : undefined;
+            this.emailAddress = theAny["emailAddress"] as string;
         }
     }
 };

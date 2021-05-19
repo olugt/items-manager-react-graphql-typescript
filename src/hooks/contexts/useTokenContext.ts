@@ -18,7 +18,7 @@ export default function useTokenContext() {
 
             try {
                 const tokenCookie = getCookie(identityCookieName);
-                tokenDetailContextModel!.fromParsedJson(JSON.parse(tokenCookie!)); // JSON.parse function may throw error if the cookie had been saved as undefined, etc. that are not valid JSON.
+                tokenDetailContextModel!.fromAny(JSON.parse(tokenCookie!)); // JSON.parse function may throw error if the cookie had been saved as undefined, etc. that are not valid JSON.
             } catch {
                 tokenDetailContextModel = null;
             }
@@ -34,6 +34,7 @@ export default function useTokenContext() {
         
         (tokenDetailContextModel) => {
 
+            console.log(isTokenValid(tokenDetailContextModel))
             if (isTokenValid(tokenDetailContextModel)) {
                 setCookie(identityCookieName, JSON.stringify(tokenDetailContextModel), tokenDetailContextModel!.expiryDatetime!);
             } else {
