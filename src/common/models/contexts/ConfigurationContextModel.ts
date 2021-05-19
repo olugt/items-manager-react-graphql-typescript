@@ -10,9 +10,9 @@ export default class ConfigurationContextModel extends ContextModelBase {
 
     /**
      * 
-     * @returns Base URL of the promo codes web API.
+     * @returns URL of the GraphQL server.
      */
-    getItemsManagerWebApiBaseUrl() {
-        return process.env.REACT_APP_ITEMS_MANAGER_WEB_API_BASE_URL;
+    getItemsManagerGraphQlServerUrl(): string {
+        return process.env.REACT_APP_ITEMS_MANAGER_GRAPHQL_SERVER_BASE_URL as string;
     }
 };
