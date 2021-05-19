@@ -1,3 +1,4 @@
+import { ERROR_CODES } from '../enumerations/ErrorCodesEnum';
 export default class ErrorModel {
     /**
      * App-wide error model. All errors should be transformed to this before throwing.
@@ -5,6 +6,6 @@ export default class ErrorModel {
      * @param data Error data of any type. It is intended to be logged as is.
      * @param code Optional error code, as enlisted in ERROR_CODES constant.
      */
-    constructor(public message: string, public data: any, public code: string) {
+    constructor(public message: string, public data?: any, public code?: ERROR_CODES) {
     }
 };
