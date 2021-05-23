@@ -1,9 +1,7 @@
-export type graphQlResponseTypeDataBase = { errors?: Record<string, string[]> }
-
 /**
  * GraphQL response type.
  */
-export type graphQlResponseType<TData extends graphQlResponseTypeDataBase> = {
+export type GraphQlResponseType<TData> = {
     data?: TData,
     errors?: {
         message?: string,

@@ -1,10 +1,11 @@
-import ErrorModel from "../ErrorModel";
+import { ErrorModel } from "../ErrorModel";
 import ContextModelBase from "./ContextModelBase";
-import { graphQlResponseType, graphQlResponseTypeDataBase } from '../../types/GraphQlResponseType';
+import { ErrorDataModel } from "../ErrorDataModel";
 
 export default class NotificationContextModel extends ContextModelBase {
     public isError: boolean | undefined;
-    public error: ErrorModel | undefined;
+    public messages: string[] = [];
+
     /**
      * Instantiate with just notification message.
      * @param show If should show notification.
@@ -19,20 +20,18 @@ export default class NotificationContextModel extends ContextModelBase {
      * @param error Error model.
      * @returns NotificationContextModel with error details.
      */
-    setError(error: ErrorModel) {
-        console.log(error);
+    setError<TErrorData>(error: ErrorModel<TErrorData>) {
+        this.message = error.message;
 
-        this.message = "Error occurred.";
-        try {
-            let errorData = error.data as graphQlResponseType<graphQlResponseTypeDataBase>;
-            if (errorData?.data?.errors) {
-                console.log(errorData)
-                this.message = Object.keys(errorData.data.errors).map(a => errorData.data!.errors![a]).reduce(b => b.map(c => c)).join("\n");
-            }
-        } catch { }
+        if (((error as unknown) as ErrorModel<ErrorDataModel[]>)?.data) {
+            let errorData = ((error as unknown) as ErrorModel<ErrorDataModel[]>)?.data!;
+
+            errorData.forEach(data => {
+                this.messages = [...this.messages, ...data.value]
+            });
+        }
 
         this.isError = true;
-        this.error = error;
         return this;
     }
 };

@@ -2,9 +2,11 @@ import { gql } from "../../common/constants/GraphQLContants";
 import { GRAPHQL_ACTION } from "../../common/enumerations/GraphQLActionEnum";
 import ConfigurationContextModel from "../../common/models/contexts/ConfigurationContextModel";
 import TokenDetailContextModel from "../../common/models/contexts/TokenDetailContextModel";
-import { graphQlResponseType } from "../../common/types/GraphQlResponseType";
-import ErrorModel from '../../common/models/ErrorModel';
+import { GraphQlResponseType } from "./types/GraphQLResponseTypes";
+import { ErrorModel } from '../../common/models/ErrorModel';
 import { ERROR_CODES } from '../../common/enumerations/ErrorCodesEnum';
+import { ErrorDataModel } from "../../common/models/ErrorDataModel";
+import { ErrorModelFieldType } from "../../common/types/ErrorModelFieldType";
 
 export default class ItemsManagerGraphQlServer {
     serverUrl: string;
@@ -24,24 +26,45 @@ export default class ItemsManagerGraphQlServer {
 
     async login(emailAddress: string, password: string): Promise<TokenDetailContextModel> {
         let mutation: string = gql`
-        mutation($emailAddress: String!, $password: String!) {
+        mutation ($emailAddress: String!, $password: String!) {
             login(credentials: {emailAddress: $emailAddress, password: $password}) {
-                token
-                expiryDatetime
-                emailAddress
+                ... on ErrorOutput {
+                error {
+                    message
+                    data {
+                        key
+                        value
+                    }
+                    code
+                }
+                }
+                ... on TokenDetailOutput {
+                    token
+                    emailAddress
+                    expiryDatetime
                 }
             }
+        }
         `;
 
-        let tokenDetail = new TokenDetailContextModel();
-        tokenDetail.fromAny((await this.client<{ login: TokenDetailContextModel }>(GRAPHQL_ACTION.mutation, {
+        let responseData = await this.client<{ login: TokenDetailContextModel | ErrorModelFieldType<ErrorDataModel[]> }>(GRAPHQL_ACTION.mutation, {
             query: mutation,
             variables: {
                 emailAddress: emailAddress,
                 password: password
             }
-        })).login);
-        return tokenDetail;
+        });
+
+        if ((responseData?.login as TokenDetailContextModel)?.token) {
+            let tokenDetail = new TokenDetailContextModel();
+            tokenDetail.fromAnyTokenDetail(responseData.login);
+            return tokenDetail;
+        } else if ((responseData?.login as ErrorModelFieldType<ErrorDataModel[]>)?.error) {
+            let error = (responseData?.login as ErrorModelFieldType<ErrorDataModel[]>)?.error;
+            throw new ErrorModel<ErrorDataModel[]>(error.message, error.data, error.code);
+        } else {
+            throw new ErrorModel<any>("Error occurred.");
+        }
     }
 
     private async client<TGraphQlResponseData>(
@@ -66,9 +89,10 @@ export default class ItemsManagerGraphQlServer {
             body: JSON.stringify(graphQl),
             method: method,
             headers: headers
-        })).json() as Promise<graphQlResponseType<TGraphQlResponseData>>);
+        })).json() as Promise<GraphQlResponseType<TGraphQlResponseData>>);
+
         if (response.errors) {
-            throw new ErrorModel("GraphQL server error occurred.", response, ERROR_CODES.graphQlServerError)
+            throw new ErrorModel("GraphQL server error occurred.", response.errors, ERROR_CODES.graphQlServerError)
         }
 
         return response.data!;

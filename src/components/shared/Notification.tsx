@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react'
 import NotificationContextModel from '../../common/models/contexts/NotificationContextModel';
 import useNotificationContext from '../../hooks/contexts/useNotificationContext';
 
-const Notification = (props: {model: NotificationContextModel, children?: ReactNode}) => {
-    
+const Notification = (props: { model: NotificationContextModel, children?: ReactNode }) => {
+
     const setNotificationContextState = useNotificationContext().setState;
 
     return (
@@ -16,6 +16,14 @@ const Notification = (props: {model: NotificationContextModel, children?: ReactN
                     }} type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h6>Notification!</h6>
                     <p>{props.model?.message}</p>
+                    {props.model?.messages &&
+                        <ul>
+                            {props.model?.messages.map((value, index, array) =>
+                                <li key={index}>{value}</li>
+                            )
+                            }
+                        </ul>
+                    }
                     {
                         props.children
                     }
