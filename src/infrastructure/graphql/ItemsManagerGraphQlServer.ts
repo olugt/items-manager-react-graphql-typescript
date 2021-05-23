@@ -63,7 +63,7 @@ export default class ItemsManagerGraphQlServer {
             let error = (responseData?.login as ErrorModelFieldType<ErrorDataModel[]>)?.error;
             throw new ErrorModel<ErrorDataModel[]>(error.message, ErrorDataModel.fromUnconstructedErrorDataModels(error.data), error.code);
         } else {
-            throw new ErrorModel<any>("Error occurred.");
+            throw new ErrorModel<any>("Undocumented error occurred during GraphQL login mutation process.");
         }
     }
 
