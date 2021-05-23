@@ -61,7 +61,7 @@ export default class ItemsManagerGraphQlServer {
             return tokenDetail;
         } else if ((responseData?.login as ErrorModelFieldType<ErrorDataModel[]>)?.error) {
             let error = (responseData?.login as ErrorModelFieldType<ErrorDataModel[]>)?.error;
-            throw new ErrorModel<ErrorDataModel[]>(error.message, error.data, error.code);
+            throw new ErrorModel<ErrorDataModel[]>(error.message, ErrorDataModel.fromUnconstructedErrorDataModels(error.data), error.code);
         } else {
             throw new ErrorModel<any>("Error occurred.");
         }
@@ -82,7 +82,7 @@ export default class ItemsManagerGraphQlServer {
 
         let method = action === GRAPHQL_ACTION.query ? "GET" : (action === GRAPHQL_ACTION.mutation ? "POST" : null);
         if (method === null) {
-            throw new ErrorModel("Invalid GraphQL action.", null, ERROR_CODES.validationError);
+            throw new ErrorModel("Invalid GraphQL action.", null, ERROR_CODES.graphQlServerError);
         }
 
         let response = await (await (await window.fetch(this.serverUrl + "/graphql", {
